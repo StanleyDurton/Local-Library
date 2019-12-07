@@ -1,0 +1,156 @@
+<!--{% load static %}-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css"
+          href="jquery/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css">
+    <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript"
+            src="jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
+
+    <title>注册</title>
+
+</head>
+<body>
+<!--导航栏-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container" >
+        <!--登陆和注册的导航栏链接-->
+        <a class="navbar-brand" href="/" style="font-size: 2rem">城市书吧</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample07"
+                aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!--判断是否登录-->
+        {% csrf_token %}
+        <div class="btn-group" role="group" style="font-size: 1rem">
+            {% if request.session.user_name %}
+            <p class="my-2 my-sm-0" style="color: white">欢迎您，读者</p>
+            <a class="my-2 my-sm-0" href="/user" style="font-color: blue">
+                <p class="my-2 my-sm-0" >{{request.session.user_name}} </p>
+            </a>
+            <p class="my-2 my-sm-0" style="color: white">  | </p>
+            <a href="/logout">
+                <p class="my-2 my-sm-0">退出</p>
+            </a>
+
+            {% else %}
+            <a href="/login" class="btn btn-outline-success">登录</a>
+            <a href="/register" class="btn btn-outline-success">注册</a>
+
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+<!-- Begin page content -->
+<div class="container">
+    <div class="mt-5 mb-5">
+
+        <form action="/register/" method="post" role="form">
+            {% csrf_token %}
+
+            <div class="form-group row">
+                <label for="user_name" class="col-lg-2 col-form-label mr-2">User Name</label>
+                <div class="col-xs-9">
+                    <input type="text" class="form-control" id="user_name" name="user_name" placeholder="Crap Bag"
+                           required
+                           autofocus>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="user_password" class="col-lg-2 col-form-label mr-2">Password</label>
+                <div class="col-xs-9">
+                    <input type="password" class="form-control" id="user_password" name="user_password" required>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="user_confirm_password" class="col-lg-2 col-form-label mr-2">Comfirm Password</label>
+                <div class="col-xs-9">
+                    <input type="password" class="form-control" id="user_confirm_password"
+                           name="user_confirm_password" required>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="user_phone" class="col-lg-2 col-form-label mr-2">Phone Number</label>
+                <div class="col-xs-9">
+                    <input type="number" class="form-control" id="user_phone" name="user_phone" value="1234567890"
+                           required>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="user_birthday" class="col-lg-2 col-form-label mr-2">Birthday</label>
+                <div class="col-xs-9">
+                    <input type="date" class="form-control" id="user_birthday" name="user_birthday" value="2019-3-6"
+                           required>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="user_gender" class="col-lg-2 col-form-label mr-2">Gender</label>
+                <div class="col-xs-9">
+                    <select class="form-control" id="user_gender" name="user_gender" required>
+                        <option>Male</option>
+                        <option>Female</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="user_email" class="col-lg-2 col-form-label mr-2">Email</label>
+                <div class="col-xs-9">
+                    <input type="email" class="form-control" id="user_email" name="user_email"
+                           value="1232343524@qq.com">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="offset-xs-3 col-lg-2 col-xs-9">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </form>
+        {% if messages %}
+        {% for message in messages %}
+        {% if message.tags == "error" %}
+        <div class="alert alert-warning" role="alert">{{ message }}</div>
+        {% endif %}
+        {% if message.tags == "success" %}
+        <div class="alert alert-info" role="alert">{{ message }}</div>
+        <div class="form-group row">
+            <div class="offset-xs-3 col-lg-2 col-xs-9">
+                <a href="/user">
+                    <button type="submit" class="btn btn-success" id="user_account" name="user_account">查看账号</button>
+                </a>
+            </div>
+            <div class="offset-xs-3 col-lg-2 col-xs-9">
+                <a href="/">
+                    <button type="submit" class="btn btn-success" id="index" name="index">继续浏览</button>
+                </a>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript =========================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>
