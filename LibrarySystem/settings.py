@@ -36,6 +36,8 @@ INSTALLED_APPS = [
     # 'user',
     # 'borrow',
     'locallibrary',
+    'simpleui',
+    'import_export',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -67,10 +69,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-            ],
-            # 添加在这个位置
-            'builtins': [
-                'django.templatetags.static'
             ],
         },
     },
@@ -126,6 +124,4 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, "static"),
-# ]
+STATIC_ROOT=os.path.join(BASE_DIR, "static")

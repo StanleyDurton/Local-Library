@@ -5,19 +5,22 @@
     <meta charset="utf-8">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="width=device-width, initial-scale=1" name="viewport">
-
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/litera/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-pLgJ8jZ4aoPja/9zBSujjzs7QbkTKvKw1+zfKuumQF9U+TH3xv09UUsRI52fS+A6" crossorigin="anonymous">
 
     <title>登录</title>
 
 </head>
 <body>
+
+
 <!--导航栏-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container" >
         <!--登陆和注册的导航栏链接-->
-        <a class="navbar-brand" href="/" style="font-size: 2rem">城市书吧</a>
+        <a class="navbar-brand" href="/" style="font-size: 1.5rem; color: white">城市书吧</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample07"
                 aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -25,19 +28,25 @@
         <!--判断是否登录-->
         {% csrf_token %}
         <div class="btn-group" role="group" style="font-size: 1rem">
+
             {% if request.session.user_name %}
-            <p class="my-2 my-sm-0" style="color: white">欢迎您，读者</p>
-            <a class="my-2 my-sm-0" href="/user" style="font-color: blue">
-                <p class="my-2 my-sm-0" >{{request.session.user_name}} </p>
+
+            <a class="my-2 my-sm-0 nav-link" style="color: white">欢迎您，读者 {{request.session.user_name}}</a>
+
+            <a href="/user" class="my-2 my-sm-0">
+                <button class="btn btn-info" type="submit">账号</button>
             </a>
-            <p class="my-2 my-sm-0" style="color: white">  | </p>
-            <a href="/logout">
-                <p class="my-2 my-sm-0">退出</p>
+            <a href="/logout" class="my-2 my-sm-0">
+                <button class="btn btn-danger" type="submit">退出</button>
             </a>
 
             {% else %}
-            <a href="/login" class="btn btn-outline-success">登录</a>
-            <a href="/register" class="btn btn-outline-success">注册</a>
+            <a href="/login" class="my-2 my-sm-0">
+                <button class="btn btn-info" type="submit">登录</button>
+            </a>
+            <a href="/register" class="my-2 my-sm-0">
+                <button class="btn btn-success" type="submit">注册</button>
+            </a>
 
             {% endif %}
         </div>

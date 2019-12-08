@@ -7,9 +7,9 @@
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="width=device-width, initial-scale=1" name="viewport">
 
-    <!-- Bootstrap CSS -->
-
-    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootswatch CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/litera/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-pLgJ8jZ4aoPja/9zBSujjzs7QbkTKvKw1+zfKuumQF9U+TH3xv09UUsRI52fS+A6" crossorigin="anonymous">
     <link href="{% static 'css/index.css' %}" rel="stylesheet"/>
     <title>主页</title>
     <style>
@@ -29,14 +29,16 @@
           -moz-background-size: cover;
           -ms-background-size: cover;
     }
+
+
+
     </style>
 </head>
 <body>
-<!--导航栏-->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
         <!--登陆和注册的导航栏链接-->
-        <a class="navbar-brand" href="/" style="font-size: 2rem">城市书吧</a>
+        <a class="navbar-brand" href="#" style="font-size: 1.5rem">城市书吧</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample07"
                 aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -44,19 +46,25 @@
         <!--判断是否登录-->
         {% csrf_token %}
         <div class="btn-group" role="group" style="font-size: 1rem">
+
             {% if request.session.user_name %}
-            <p class="my-2 my-sm-0" style="color: white">欢迎您，读者</p>
-            <a class="my-2 my-sm-0" href="/user" style="font-color: blue">
-                <p class="my-2 my-sm-0">{{request.session.user_name}} </p>
+
+            <a class="my-2 my-sm-0 nav-link" style="color: black">欢迎您，读者 {{request.session.user_name}}</a>
+
+            <a href="/user" class="my-2 my-sm-0">
+                <button class="btn btn-info" type="submit">账号</button>
             </a>
-            <p class="my-2 my-sm-0" style="color: white"> | </p>
-            <a href="/logout">
-                <p class="my-2 my-sm-0">退出</p>
+            <a href="/logout" class="my-2 my-sm-0">
+                <button class="btn btn-danger" type="submit">退出</button>
             </a>
 
             {% else %}
-            <a href="/login" class="btn btn-outline-success">登录</a>
-            <a href="/register" class="btn btn-outline-success">注册</a>
+            <a href="/login" class="my-2 my-sm-0">
+                <button class="btn btn-info" type="submit">登录</button>
+            </a>
+            <a href="/register" class="my-2 my-sm-0">
+                <button class="btn btn-success" type="submit">注册</button>
+            </a>
 
             {% endif %}
         </div>
@@ -64,43 +72,41 @@
 </nav>
 
 <!--搜索框-->
-<div class="search-block-content" style="height: 314px; margin-bottom: 32px; padding-top: 64px;">
-        <!--    搜索块-->
-        <div class="container">
+<div class="search-block-content" style="height: 320px; margin-bottom: 32px; padding-top: 64px;">
+    <div class="container">
+        <!-- 引用块 -->
+        <blockquote class="blockquote">
+            <p class="mb-0">倘能生存，我当然仍要学习。</p>
+            <footer class="blockquote-footer" style="color: #373c41">鲁迅</footer>
+        </blockquote>
 
-            <h4 style="font-family: fangsong">倘能生存，我当然仍要学习。 ——鲁迅</h4>
+        <!--查询的输入框表单-->
+        <!--post回到query界面-->
+        <div class="row" style="margin-top: 64px;">
 
-            <!--查询的输入框表单-->
-            <!--post回到query界面-->
-            <form class="form-horizen" action="/query/" method="post" role="form">
+            <form class="form-inline my-2 my-lg-0" action="/query/" method="post" role="form">
                 {% csrf_token %}
-                <div class="form-inline">
-                    <div class="form-group" style="margin-top: 64px;">
-                        <input class="form-control span3" type="text" name="search" id="book_search"
-                               placeholder="输入图书名" aria-label="Search" autofocus required>
-                        <button type="submit" class="btn btn-primary ">查询</button>
-                    </div>
-
-                </div>
+                <input class="form-control mr-sm-2" type="text" name="search" id="search" placeholder="书名，作者，ISBN">
+                <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
             </form>
-
-
+            <button class="btn btn-info my-2 my-sm-0" type="submit" style="margin-left: 12px">
+                <a href="/query/" style="color:white">Category »</a>
+            </button>
         </div>
+
+    </div>
 </div>
 
 <div class="container" style="">
     <!-- 加载最近上架的新书 -->
     <div class="row">
         <div class="col-md-8">
-            <div class="row">
-                <h5 style="font-family: fangsong; padding-left: 10px">本周新书推荐</h5>
-                <a href="#">
-                    <h5 style="font-family: fangsong;">更多 »</h5>
-                </a>
-            </div>
+            <!-- 新书推荐 -->
+            <h5 style="font-family: fangsong; padding-left: 10px">本周新书推荐</h5>
+
             <hr>
+            <!-- 展示最新上架的三本书-->
             <div class="row">
-                <!-- 展示最新上架的三本书-->
                 {% for line in book_list %}
                 <div class="col-sm-6 col-md-4">
                     <div class="thumbnail">
@@ -116,39 +122,42 @@
             </div>
         </div>
 
+        <!-- 这里可以放公告或者一些小故事-->
         <div class="col-md-4">
-            <!-- 这里可以放公告或者一些小故事-->
-            <h4 id="detail">借书须知</h4>
-            <hr>
-            <ol>
-                <li>
-                    读者每次至多借阅2本，且需要在15天之内归还。
-                </li>
-                <li>
-                    借阅图书达到借阅时间上限，逾期未还，则1元/天。
-                </li>
-                <li>
-                    若读者信誉良好，且借阅次数达到20次以上，则可增加其每次最多借阅数目。
-                </li>
-            </ol>
+
+            <!--            <h5>借书须知</h5>-->
+            <!--            <hr>-->
+            <div class="card border-warning mb-3" style="max-width: 20rem;">
+                <div class="card-header">借书须知</div>
+                <div class="card-body">
+                    <ol class="list-group">
+                        <li class="card-text">
+                            读者可借图书2册
+                        </li>
+                        <li class="card-text">
+                            图书外借期限为60天，在未逾期及无他人预约的情况下可续借两次。
+                        </li>
+                        <li class="card-text">
+                            借阅图书达到借阅时间上限，逾期未还，则1元/天。
+                        </li>
+                        <li class="card-text">
+                            若读者信誉良好，且借阅次数达到20次以上，则可增加其每次最多借阅数目。
+                        </li>
+                    </ol>
+                </div>
+            </div>
             <p>
-                <a class="btn btn-secondary" href="#" role="button">更多注意事项 »</a>
+                <a class="btn btn-primary" href="#" role="button">更多注意事项 »</a>
             </p>
         </div>
     </div>
 
     <hr>
 </div>
+
 <footer class="container">
     <p>© Library System by Stan 2019</p>
 </footer>
-
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-{# 以下三者的引用顺序是固定的#}
-<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
-<script src="https://cdn.bootcss.com/popper.js/1.15.0/umd/popper.js"></script>
-<script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 </body>
 </html>

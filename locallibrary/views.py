@@ -74,9 +74,79 @@ def logout(request):
 def query(request):
     if request.method == 'POST':
         book_name = request.POST.get('search')
+
         if book_name.strip():
-            books = Book.objects.filter(book_name__contains=book_name)
-            return render(request, 'query.html', {'book_list': books, 'arr_length': len(books)})
+            book_list = Book.objects.filter(book_name__contains=book_name)
+            query_string = book_name
+        else:
+            book_list = Book.objects.all()
+            query_string = ""
+
+    else:
+        book_list = Book.objects.all()
+        query_string = ""
+
+    arr_length = len(book_list)
+    flag = True
+    if arr_length > 0:
+        subject_list = book_list.order_by('book_category_choice').values_list('book_category_choice', flat=True).distinct()
+        press_list = book_list.order_by('book_press').values_list('book_press', flat=True).distinct()
+        messages.success(request, "为您找到 %s 本书" % arr_length)
+    else:
+        messages.error(request, "没有检索到您的输入信息")
+
+    return render(request, 'query.html', locals())
+
+
+def filter(request):
+    if request.method == "POST":
+        title = request.POST.get("title")
+        author = request.POST.get("author")
+        start_date = request.POST.get("start_date")
+        end_date = request.POST.get("end_date")
+        subject = request.POST.get("subject")
+        press = request.POST.get("press")
+        query_string = request.POST.get("query_string")
+        print("query_String:", query_string)
+        if query_string == "":
+            record = Book.objects.all()
+        else:
+            print("yes")
+            record = Book.objects.filter(book_name__contains=query_string)
+        print("record:", record)
+        if title.strip():
+            print("title: ", title)
+            record = record.filter(book_name__contains=title.strip())
+        if author.strip():
+            print("author:", author)
+            record = record.filter(book_author=author.strip())
+        if start_date and end_date:
+            print("date:", start_date, end_date)
+            record = record.filter(book_publish_date__range=(start_date, end_date))
+        if subject:
+            print("subect:", subject)
+            record = record.filter(book_category_choice=subject)
+        if press:
+            print("press:", press)
+            record = record.filter(book_press=press)
+        book_list = record
+        arr_length = len(book_list)
+        flag = False
+        if arr_length > 0:
+            subject_list = book_list.order_by('book_category_choice').values_list('book_category_choice',
+                                                                                  flat=True).distinct()
+            press_list = book_list.order_by('book_press').values_list('book_press', flat=True).distinct()
+            messages.success(request, "为您找到 %s 本书" % arr_length)
+        else:
+            messages.error(request, "没有检索到您的输入信息")
+
+        return render(request, 'query.html', locals())
+
+
+
+
+
+
 
 
 # 书目详情视图
@@ -91,6 +161,7 @@ def account(request):
     # print(name)
     q = User.objects.get(user_name=name)
     records = Borrow.objects.filter(user=q)
+    record_number = len(records)
     return render(request, 'interface.html', locals())
 
 

@@ -5,19 +5,22 @@
     <meta charset="utf-8">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="width=device-width, initial-scale=1" name="viewport">
-        <!-- Bootstrap CSS -->
-    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+
+    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/litera/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-pLgJ8jZ4aoPja/9zBSujjzs7QbkTKvKw1+zfKuumQF9U+TH3xv09UUsRI52fS+A6" crossorigin="anonymous">
 
     <title>查询</title>
 
 </head>
 <body>
 
+
 <!--导航栏-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
+    <div class="container" >
         <!--登陆和注册的导航栏链接-->
-        <a class="navbar-brand" href="/" style="font-size: 2rem">城市书吧</a>
+        <a class="navbar-brand" href="/" style="font-size: 1.5rem; color: white">城市书吧</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample07"
                 aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -25,45 +28,50 @@
         <!--判断是否登录-->
         {% csrf_token %}
         <div class="btn-group" role="group" style="font-size: 1rem">
+
             {% if request.session.user_name %}
-            <p class="my-2 my-sm-0" style="color: white">欢迎您，读者</p>
-            <a class="my-2 my-sm-0" href="/user" style="font-color: blue">
-                <p class="my-2 my-sm-0">{{request.session.user_name}} </p>
+
+            <a class="my-2 my-sm-0 nav-link" style="color: white">欢迎您，读者 {{request.session.user_name}}</a>
+
+            <a href="/user" class="my-2 my-sm-0">
+                <button class="btn btn-info" type="submit">账号</button>
             </a>
-            <p class="my-2 my-sm-0" style="color: white"> | </p>
-            <a href="/logout">
-                <p class="my-2 my-sm-0">退出</p>
+            <a href="/logout" class="my-2 my-sm-0">
+                <button class="btn btn-danger" type="submit">退出</button>
             </a>
 
             {% else %}
-            <a href="/login" class="btn btn-outline-success">登录</a>
-            <a href="/register" class="btn btn-outline-success">注册</a>
+            <a href="/login" class="my-2 my-sm-0">
+                <button class="btn btn-info" type="submit">登录</button>
+            </a>
+            <a href="/register" class="my-2 my-sm-0">
+                <button class="btn btn-success" type="submit">注册</button>
+            </a>
 
             {% endif %}
         </div>
     </div>
 </nav>
 
-<div class="container" style="padding-top: 30px;">
+<div class="container" style="padding-top: 30px">
     <div class="row">
         <div class="col-md-3">
-            <div class="sidebar-module">
-                <h4>About {{ q.user_name }}</h4>
-                <hr>
-                <div class="media">
-                    <div class="media-body">
-                        <ol class="list-unstyled">
+
+            <div class="card border-primary mb-3" style="max-width: 20rem;">
+                <div class="card-header">About {{ q.user_name }}</div>
+                <div class="card-body">
+                    <ol class="list-unstyled">
                             <li>
-                                <strong>Name: </strong>{{ q.user_phone }}
+                                <strong>Name: </strong><br>{{ q.user_phone }}
                             </li>
                             <li>
-                                <strong>Birthday:</strong> {{ q.user_birthday }}
+                                <strong>Birthday:</strong> <br>{{ q.user_birthday }}
                             </li>
                             <li>
-                                <strong>Gender:</strong> {{ q.user_gender }}
+                                <strong>Gender:</strong> <br>{{ q.user_gender }}
                             </li>
                             <li>
-                                <strong>Email:</strong> {{ q.user_email }}
+                                <strong>Email:</strong> <br>{{ q.user_email }}
                             </li>
                             <li>
                                 <strong>Something Else</strong>
@@ -71,54 +79,59 @@
                             </li>
 
                         </ol>
-                    </div>
                 </div>
             </div>
 
             <div class="sidebar-module">
-                <a href="/user/" class="btn btn-sm btn-block btn-outline-info">借还书记录</a>
-                <a href="/modify" class="btn btn-sm btn-block btn-outline-info">修改账号信息</a>
+                <a href="/user/" class="btn btn-block btn-outline-info">借还书记录</a>
+                <a href="/modify" class="btn btn-block btn-outline-warning">修改账号信息</a>
             </div>
         </div>
         <!-- /.blog-sidebar -->
 
         <div class="col-md-9">
             <div class="sidebar-module">
-                <h4>借还书记录</h4>
+
+                <h5>借还书记录 {{ record_number }} 本</h5>
                 <hr>
                 <div class="media">
                     <div class="media-body">
 
                         <!-- 展示借还书记录-->
-                        <table class="table table-hover" style="font-size: 0.8rem">
-                            <tr>
+
+                        <table class="table table-hover table-striped" style="font-size: 0.8rem">
+                            <tr class="table-primary">
                                 <th>书名</th>
                                 <th style="width: 174px">作者</th>
                                 <th>出版社</th>
-<!--                                <th>出版日期</th>-->
                                 <th>借出时间</th>
                                 <th>归还时间</th>
                             </tr>
                             {% for record in records %}
                             <tr>
-                                <td>{{record.book.book_name}}</td>
+                                <td>
+                                    <a href="/book/{{ record.book.book_isbn }}"> {{record.book.book_name}} </td>
+                                </td>
                                 <td>{{record.book.book_author}}</td>
                                 <td>{{record.book.book_press}}</td>
                                 <td>{{record.borrow_time}}</td>
                                 {% if record.is_return == "False" %}
-                                    <td>
-                                        <a href="/return/{{record.book.book_isbn}}" class="btn btn-outline-success">还书</a>
-                                    </td>
+                                <td>
+                                    <a href="/return/{{record.book.book_isbn}}" class="btn btn-sm btn-outline-success">还书</a>
+                                </td>
                                 {% else %}
                                 <td>{{record.return_time}}</td>
                                 {% endif %}
                             </tr>
                             {% endfor %}
 
+
                         </table>
+
 
                     </div>
                 </div>
+
             </div>
         </div>
 

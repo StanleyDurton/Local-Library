@@ -8,17 +8,18 @@
     <meta content="width=device-width, initial-scale=1" name="viewport">
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-    <!--    <link href="{% static 'book_management/image/' %}" rel="stylesheet"/>-->
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/litera/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-pLgJ8jZ4aoPja/9zBSujjzs7QbkTKvKw1+zfKuumQF9U+TH3xv09UUsRI52fS+A6" crossorigin="anonymous">
     <title>查询</title>
 </head>
 <body>
 
 <!--导航栏-->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container" >
+<nav class="navbar navbar-expand-lg navbar-light bg-primary">
+    <div class="container">
         <!--登陆和注册的导航栏链接-->
-        <a class="navbar-brand" href="/" style="font-size: 2rem">城市书吧</a>
+        <a class="navbar-brand" href="/" style="font-size: 1.5rem; color: white">城市书吧</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample07"
                 aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -26,84 +27,166 @@
         <!--判断是否登录-->
         {% csrf_token %}
         <div class="btn-group" role="group" style="font-size: 1rem">
+
             {% if request.session.user_name %}
-            <p class="my-2 my-sm-0" style="color: white">欢迎您，读者</p>
-            <a class="my-2 my-sm-0" href="/user" style="font-color: blue">
-                <p class="my-2 my-sm-0" >{{request.session.user_name}} </p>
+
+            <a class="my-2 my-sm-0 nav-link" style="color: white">欢迎您，读者 {{request.session.user_name}}</a>
+
+            <a href="/user" class="my-2 my-sm-0">
+                <button class="btn btn-info" type="submit">账号</button>
             </a>
-            <p class="my-2 my-sm-0" style="color: white">  | </p>
-            <a href="/logout">
-                <p class="my-2 my-sm-0">退出</p>
+            <a href="/logout" class="my-2 my-sm-0">
+                <button class="btn btn-danger" type="submit">退出</button>
             </a>
 
             {% else %}
-            <a href="/login" class="btn btn-outline-success">登录</a>
-            <a href="/register" class="btn btn-outline-success">注册</a>
+            <a href="/login" class="my-2 my-sm-0">
+                <button class="btn btn-info" type="submit">登录</button>
+            </a>
+            <a href="/register" class="my-2 my-sm-0">
+                <button class="btn btn-success" type="submit">注册</button>
+            </a>
 
             {% endif %}
         </div>
     </div>
 </nav>
 
+<!--<div class="jumbotron">-->
 
-<div class="jumbotron">
-    {% csrf_token %}
-    <div class="container">
-        <main role="main" class="container">
-            <div class="row">
-                <div class="col-sm-8 blog-main">
-                    <div class="blog-post">
-                        <h5 class="blog-post-title">Found {{ arr_length|default:"0" }} book(s)</h5>
-                        <hr>
-                        <div class="media">
-                            <div class="media-body">
-                                <ol>
-                                    {% for book in book_list %}
+<!--    <div class="container">-->
 
-                                    <li> <a href="/book/{{book.book_isbn}}">{{ book.book_name}}. {{ book.book_author }}. {{ book.book_press }}. {{ book.book_publish_time }} </a> </li>
+<main role="main" class="container" style="padding-top: 30px;">
 
-                                    {% endfor %}
-                                </ol>
+
+    <div class="row">
+
+        <aside class="col-sm-3 blog-sidebar">
+            <div class="sidebar-module">
+                <!--                        <h5>在结果中筛选</h5>-->
+                <!--                        <hr>-->
+                <form action="/filter/" method="post">
+                    {% csrf_token %}
+                    <div class="card border-info mb-3" style="max-width: 20rem;">
+
+                        <input type="text" style="display:none;" value="{{query_string}}">
+
+                        <div class="card-header">在结果中查询</div>
+                        <div class="card-body" style="padding-bottom: 0px">
+                            <h6 class="card-title">书名</h6>
+                            <input class="form-control  card-text" style="margin-bottom: 12px" type="text" name="title"
+                                   id="title" >
+
+                            <h6 class="card-title">作者</h6>
+                            <input class="form-control  card-text" style="margin-bottom: 12px" type="text" name="author"
+                                   id="author" >
+
+                            <h6 class="card-title">出版日期</h6>
+                            <small class="form-text text-muted" style="text-align:right">开始日期</small>
+                            <div class="form-group">
+                                <div class="col-xs-9">
+                                    <input type="date" class="form-control" id="start_date" name="start_date">
+                                </div>
                             </div>
-                        </div>
 
+                            <small class="form-text text-muted" style="text-align:right">截至日期</small>
+                            <div class="form-group">
+                                <div class="col-xs-9">
+                                    <input type="date" class="form-control" id="end_date" name="end_date">
+                                </div>
+                            </div>
+
+                            <h6 class="card-title">主题</h6>
+                            <div class="form-group">
+                                <select class="form-control" id="subject" name="subject">
+                                    <option></option>
+                                    {% for subject in subject_list %}
+                                    <option>{{ subject }}</option>
+                                    {% endfor %}
+                                </select>
+
+                            </div>
+
+                            <h6 class="card-title">出版社</h6>
+                            <div class="form-group">
+                                <select class="form-control" id="press" name="press">
+                                    <option></option>
+                                    {% for press in press_list %}
+                                    <option>{{ press }}</option>
+                                    {% endfor %}
+                                </select>
+
+                            </div>
+
+                        </div>
+                        <input type="text" style="display:none;" name="query_string" value="{{ query_string }}">
+                        {% if flag %}
+                        <button class="btn btn-primary" style="margin-bottom: 15px" type="submit">Search</button>
+                        {% else %}
+                        <button class="btn btn-primary" style="margin-bottom: 15px" type="submit" disabled>Search</button>
+                        {% endif %}
+
+                    </div>
+
+                </form>
+            </div>
+        </aside>
+
+
+        <!-- /.blog-sidebar -->
+
+        <div class="col-sm-8 blog-main">
+            <!--查询的输入框表单-->
+            <!--再次查询-->
+            <form class="form-inline my-2 my-lg-0" action="/query/" method="post" role="form">
+                <div>
+                    {% csrf_token %}
+                    <input class="form-control mr-sm-2" type="text" name="search" id="search"
+                           placeholder="{{ book_name }}">
+                    <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
+                    <button class="btn btn-info my-2 my-sm-0" type="submit">Category »</button>
+                </div>
+            </form>
+            <div class="blog-post" style="padding-top: 30px;">
+
+                {% if messages %}
+                {% for message in messages %}
+                {% if message.tags == "error" %}
+                <div class="alert alert-warning" role="alert">{{ message }}</div>
+
+
+                {% endif %}
+                {% if message.tags == "success" %}
+                <div class="alert alert-info" role="alert">{{ message }}</div>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+
+                <hr>
+                <div class="media">
+                    <div class="media-body">
+                        <ol>
+                            {% for book in book_list %}
+                            <li>
+                            <a href="/book/{{book.book_isbn}}" style='font-family: Georgia, Cambria, "Times New Roman", Times, serif;'>{{ book.book_name}}. {{ book.book_author }}.
+                                {{ book.book_press }}. {{ book.book_publish_time }} </a>
+                            </li>
+                            {% endfor %}
+
+                        </ol>
                     </div>
                 </div>
 
-                <aside class="col-sm-3 blog-sidebar">
-                    <div class="sidebar-module">
-                        <h5>在结果中筛选</h5>
-                        <hr>
-                        <ol class="list-unstyled">
-                            <li>
-                                <a href="#">日期</a>
-                            </li>
-                            <li>
-                                <a href="#">主题</a>
-                            </li>
-                            <li>
-                                <a href="#">只看有货</a>
-                            </li>
-                        </ol>
-                    </div>
-                </aside>
-                <!-- /.blog-sidebar -->
-
             </div>
-            <!-- /.row -->
-
-        </main>
+        </div>
 
     </div>
-</div>
+    <!-- /.row -->
 
+</main>
 
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-{# 以下三者的引用顺序是固定的#}
-<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
-<script src="https://cdn.bootcss.com/popper.js/1.15.0/umd/popper.js"></script>
-<script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
+<!--    </div>-->
+<!--</div>-->
+<script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
 </body>
 </html>

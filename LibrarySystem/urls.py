@@ -29,4 +29,5 @@ urlpatterns = [
     path('borrow/<book_isbn>', view.borrow_view),
     path('logout/', view.logout),
     path('modify/', view.modify),
+    path('filter/', view.filter)
 ]

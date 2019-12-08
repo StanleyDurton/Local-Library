@@ -11,7 +11,7 @@ setuptools.setup(
     description="Package for Library System",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    # url="https://github.com/pypa/sampleproject",
+    url="https://github.com/StanleyDurton/Local-Library.git",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
