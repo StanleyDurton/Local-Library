@@ -13,7 +13,7 @@ from datetime import datetime
 from django.test import TestCase
 from xlrd import open_workbook
 
-from locallibrary.models import Book
+from locallibrary.models import Book, User
 
 # 将选择器过滤的信息分离
 col_list = ["书名", "作者", "出版社", "出版日期", "价格", "ISBN", "简介"]
@@ -32,10 +32,12 @@ link_list = []
 book_set = Book.objects.all()
 book_exist_list = []
 
+user_exist_list = User.objects.values_list('user_name', flat=True).distinct()
+
 # 获取数据库中现有的图书名
 for item in book_set:
     book_exist_list.append(item.book_name)
-print("数据库中已经存在的book：", book_exist_list)
+# print("数据库中已经存在的book：", book_exist_list)
 
 
 # 抓取豆瓣读书某个分类下的全部书籍列表信息
@@ -166,42 +168,51 @@ def load_data_from_file(file_path):
     cnt = 0
     for i in range(1, row_number):
         row = table.row_values(i)
-        if row[1] in book_exist_list:
+        if row[1] in user_exist_list:
             continue
-        print(row)
-        # print(row[8])
-        if len(row[7].strip()) <= 7:
-            date = datetime.strptime(row[7].strip(), "%Y-%m")
+        # print(row)
+        if len(row[4].strip()) <= 7:
+            date = datetime.strptime(row[4].strip(), "%Y-%m")
         else:
-            date = datetime.strptime(row[7].strip(), "%Y-%m-%d")
+            date = datetime.strptime(row[4].strip(), "%Y-%m-%d")
 
-        new_record = Book.objects.create(book_name=row[1],
-                                         book_author=row[2],
-                                         book_press=row[3],
-                                         book_isbn=row[4],
-                                         book_language=row[5],
-                                         book_price=row[6],
-                                         book_publish_date=date,
-                                         book_number=row[8],
-                                         book_category_choice=row[9],
-                                         book_summary=row[10],
+        new_record = User.objects.create(user_name=row[1],
+                                         user_password=row[2],
+                                         user_phone=row[3],
+                                         user_birthday=date,
+                                         user_gender=row[5],
+                                         user_email=row[6],
                                          )
         new_record.save()
         cnt += 1
-    print("successfully execute: ", cnt)
+    print("successfully create users: ", cnt)
+
+
+def load_user_from_file(file_path):
+    data = open_workbook(file_path)
+    table = data.sheets()[0]
+    row_number = table.nrows
+    cnt = 0
+    for i in range(1, row_number):
+        row = table.row_values(i)
+        if row[1] in book_exist_list:
+            continue
+
+
 
 
 class DatabaseTest(TestCase):
     # 书籍分类标签
     tag = "society"
     url = 'https://book.douban.com/tag/' + tag
-    file_path = "C:/Users/imagi/Downloads/Book-2019-12-07.xls"
+    file_path = "C:/Users/imagi/Downloads/User-2019-12-09.xls"
 
     # 从爬虫中获取书籍，并写入数据库
     # load_data_from_list(url, tag)
 
     # 从文件中读取书籍，并写入数据库
-    load_data_from_file(file_path)
+    # load_data_from_file(file_path)
+    load_user_from_file(file_path)
 
 
 

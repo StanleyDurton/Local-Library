@@ -1,0 +1,6 @@
+python==3.7.5
+django==2.2.7
+django-simpleui==3.6
+django-import-export
+requests
+bs4
