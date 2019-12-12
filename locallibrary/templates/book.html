@@ -17,7 +17,7 @@
 
 <!--导航栏-->
 <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-    <div class="container" >
+    <div class="container">
         <!--登陆和注册的导航栏链接-->
         <a class="navbar-brand" href="/" style="font-size: 1.5rem; color: white">城市书吧</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample07"
@@ -103,6 +103,7 @@
 
                         }
 
+
             </script>
 
             <hr>
@@ -115,12 +116,14 @@
                     <p><strong>Language:</strong> {{ book.book_language }}</p>
                     <p><strong>Theme:</strong> {{ book.book_category_choice }}</p>
                     <p><strong>Number:</strong> {{ book.book_number }}</p>
+                    <div class="btn-group" role="group" aria-label="...">
+                        <button type="button" class="btn btn-outline-primary">浏览</button>
+                        <button type="button" class="btn btn-info">{{ book.book_views }}</button>
+                    </div>
                 </div>
 
-                <div class="col-md-4">
-
+                <div class="col-md-4" style="align: center">
                     <img src="../static/image/{{book.book_name}}.jpg" width="180" height="240" alt="...">
-
                 </div>
             </div>
             <hr>

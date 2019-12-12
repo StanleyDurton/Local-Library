@@ -13,7 +13,7 @@ from datetime import datetime
 from django.test import TestCase
 from xlrd import open_workbook
 
-from locallibrary.models import Book, User
+from locallibrary.models import Book, User, Borrow
 
 # 将选择器过滤的信息分离
 col_list = ["书名", "作者", "出版社", "出版日期", "价格", "ISBN", "简介"]
@@ -32,13 +32,14 @@ link_list = []
 book_set = Book.objects.all()
 book_exist_list = []
 
-user_exist_list = User.objects.values_list('user_name', flat=True)
-print(user_exist_list)
-
 # 获取数据库中现有的图书名
 for item in book_set:
     book_exist_list.append(item.book_name)
 # print("数据库中已经存在的book：", book_exist_list)
+
+user_exist_list = User.objects.values_list('user_name', flat=True)
+print("数据库中已经存在的user：", user_exist_list)
+
 
 
 # 抓取豆瓣读书某个分类下的全部书籍列表信息
@@ -162,7 +163,7 @@ def load_data_from_list(url, tag):
     print("Successfully execute: ", cnt)
 
 
-def load_data_from_file(file_path):
+def load_book_from_file(file_path):
     data = open_workbook(file_path)
     table = data.sheets()[0]
     row_number = table.nrows
@@ -220,21 +221,43 @@ def load_user_from_file(file_path):
     print("successfully create users: ", cnt)
 
 
+def load_borrow_from_file(file_path):
+    data = open_workbook(file_path)
+    table = data.sheets()[0]
+    row_number = table.nrows
+    cnt = 0
+    for i in range(1, row_number):
+        row = table.row_values(i)
+        print(row)
+        borrow_time = datetime.strptime(row[3].strip(), "%Y-%m-%d %H:%M:%S")
+        return_time = datetime.strptime(row[4].strip(), "%Y-%m-%d %H:%M:%S")
+        u = User.objects.get(user_id=row[1])
+        b = Book.objects.get(book_id=row[2])
+
+        new_record = Borrow.objects.create(user=u,
+                                           book=b,
+                                           borrow_time=borrow_time,
+                                           return_time=return_time,
+                                           is_return=row[5],
+                                           )
+        new_record.save()
+        cnt += 1
+    print("successfully create borrow records: ", cnt)
+
+
 class DatabaseTest(TestCase):
     # 书籍分类标签
     tag = "society"
     url = 'https://book.douban.com/tag/' + tag
-    file_path = "C:/Users/imagi/Downloads/User-2019-12-07.xls"
+
+    book_path = "Book-2019-12-07.xls"
+    user_path = "User-2019-12-07.xls"
+    borrow_path = "C:/Users/imagi/Downloads/Borrow-2019-12-09 (1).xls"
 
     # 从爬虫中获取书籍，并写入数据库
     # load_data_from_list(url, tag)
 
     # 从文件中读取书籍，并写入数据库
-    # load_data_from_file(file_path)
-    load_user_from_file(file_path)
-
-
-
-
-
-
+    # load_book_from_file(book_path)
+    # load_user_from_file(user_path)
+    # load_borrow_from_file(borrow_path)

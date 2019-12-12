@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="locallibrary", # Replace with your own username
-    version="0.0.1",
+    version="1.0.0",
     author="Stan",
     author_email="imaginistlu@outlook.com",
     description="Package for Library System",

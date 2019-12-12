@@ -11,6 +11,14 @@
           integrity="sha384-pLgJ8jZ4aoPja/9zBSujjzs7QbkTKvKw1+zfKuumQF9U+TH3xv09UUsRI52fS+A6" crossorigin="anonymous">
 
     <title>查询</title>
+    <style>
+    strong{
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+        }
+
+
+
+    </style>
 
 </head>
 <body>
@@ -18,7 +26,7 @@
 
 <!--导航栏-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container" >
+    <div class="container">
         <!--登陆和注册的导航栏链接-->
         <a class="navbar-brand" href="/" style="font-size: 1.5rem; color: white">城市书吧</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample07"
@@ -53,38 +61,35 @@
     </div>
 </nav>
 
-<div class="container" style="padding-top: 30px">
+<div class="container" style='padding-top: 30px;'>
     <div class="row">
         <div class="col-md-3">
 
-            <div class="card border-primary mb-3" style="max-width: 20rem;">
-                <div class="card-header">About {{ q.user_name }}</div>
+            <div class="card border-primary mb-3" style='max-width: 20rem;'>
+                <div class="card-header"><strong>读者</strong> {{ q.user_name }}</div>
                 <div class="card-body">
                     <ol class="list-unstyled">
-                            <li>
-                                <strong>Name: </strong><br>{{ q.user_phone }}
-                            </li>
-                            <li>
-                                <strong>Birthday:</strong> <br>{{ q.user_birthday }}
-                            </li>
-                            <li>
-                                <strong>Gender:</strong> <br>{{ q.user_gender }}
-                            </li>
-                            <li>
-                                <strong>Email:</strong> <br>{{ q.user_email }}
-                            </li>
-                            <li>
-                                <strong>Something Else</strong>
+                        <li>
+                            <strong>手机号: </strong><br>{{ q.user_phone }}
+                        </li>
+                        <li>
+                            <strong>生日:</strong> <br>{{ q.user_birthday }}
+                        </li>
+                        <li>
+                            <strong>性别:</strong> <br>{{ q.user_gender }}
+                        </li>
+                        <li>
+                            <strong>邮箱:</strong> <br>{{ q.user_email }}
+                        </li>
 
-                            </li>
-
-                        </ol>
+                    </ol>
                 </div>
             </div>
 
             <div class="sidebar-module">
                 <a href="/user/" class="btn btn-block btn-outline-info">借还书记录</a>
                 <a href="/modify" class="btn btn-block btn-outline-warning">修改账号信息</a>
+                <a href="/report" class="btn btn-block btn-outline-info">个人读书报告</a>
             </div>
         </div>
         <!-- /.blog-sidebar -->
@@ -92,13 +97,15 @@
         <div class="col-md-9">
             <div class="sidebar-module">
 
+                {% if request.session.record %}
+
+                <!-- show records -->
                 <h5>借还书记录 {{ record_number }} 本</h5>
                 <hr>
                 <div class="media">
                     <div class="media-body">
 
                         <!-- 展示借还书记录-->
-
                         <table class="table table-hover table-striped" style="font-size: 0.8rem">
                             <tr class="table-primary">
                                 <th>书名</th>
@@ -110,7 +117,7 @@
                             {% for record in records %}
                             <tr>
                                 <td>
-                                    <a href="/book/{{ record.book.book_isbn }}"> {{record.book.book_name}} </td>
+                                    <a href="/book/{{ record.book.book_isbn }}"> {{record.book.book_name}} </a>
                                 </td>
                                 <td>{{record.book.book_author}}</td>
                                 <td>{{record.book.book_press}}</td>
@@ -124,15 +131,44 @@
                                 {% endif %}
                             </tr>
                             {% endfor %}
-
-
                         </table>
-
-
                     </div>
                 </div>
+                {% endif %}
+
+                {% if request.session.report %}
+
+                <!--show report-->
+                <h5>读书报告</h5>
+                <hr>
+                <!--diagram-->
+                <div id="container" style="height: 300px; width: 800px"></div>
+
+                <h5>读书榜单</h5>
+                <hr>
+                <div style="height: 300px; width: 800px">
+                    <table class="table table-hover" style="text-align:center">
+                        <thead>
+                        <tr>
+                            <th>Book</th>
+                            <th>Times</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for record in year_number  %}
+                        <tr>
+                            <td>{{ record.0 }}</td>
+                            <td>{{ record.1 }}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                {% endif %}
 
             </div>
+
         </div>
 
 
@@ -147,6 +183,74 @@
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
 <script src="https://cdn.bootcss.com/popper.js/1.15.0/umd/popper.js"></script>
 <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
+<!--report script-->
+ <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+<script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/echarts-gl/dist/echarts-gl.min.js"></script>
+<script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/echarts-stat/dist/ecStat.min.js"></script>
+<script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/china.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/world.js"></script>
+<script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/bmap.min.js"></script>
+<script type="text/javascript">
+    var kv = new Array();//声明一个新的字典
+    kv = {{ data_year|safe }};//取出后台传递的数据，此处添加safe过滤避免警告
+    var test = new Array();//声明一个新的字典用于存放数据
+    for (var logKey in kv) {
+        //将对应键值对取出存入test，logKey 为该字典的键
+        test.push({value: kv[logKey], name: logKey});
+    }
+
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+    var app = {};
+    option = null;
+    option = {
+        backgroundColor: '#0000',
+
+        title: {
+            text: 'Theme',
+            left: 'center',
+            top: 20,
+            textStyle: {
+            color: '#fff'
+            }
+        },
+
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+
+
+        series : [
+        {
+            name:'主题',
+            type:'pie',
+            radius : '55%',
+            center: ['50%', '50%'],
+            data: test,
+            roseType: 'radius',
+
+
+            animationType: 'scale',
+            animationEasing: 'elasticOut',
+            animationDelay: function (idx) {
+                return Math.random() * 200;
+            }
+        }]
+    };
+    if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+    }
+
+</script>
 
 </body>
 </html>

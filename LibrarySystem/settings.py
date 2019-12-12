@@ -31,10 +31,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    # 'book_management',
-    # 'login',
-    # 'user',
-    # 'borrow',
     'locallibrary',
     'simpleui',
     'import_export',

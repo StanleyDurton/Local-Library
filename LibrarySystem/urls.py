@@ -24,10 +24,11 @@ urlpatterns = [
     path('login/', view.login),
     path('register/', view.register),
     path('user/', view.account),
-    path('return/<book_isbn>', view.return_book_view),
+    path('return/<book_isbn>', view.return_book),
     path('book/<isbn>', view.book),
-    path('borrow/<book_isbn>', view.borrow_view),
+    path('borrow/<book_isbn>', view.borrow_book),
     path('logout/', view.logout),
     path('modify/', view.modify),
-    path('filter/', view.filter)
+    path('filter/', view.advance_query),
+    path('report/', view.report)
 ]
