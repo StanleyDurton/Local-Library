@@ -8,7 +8,8 @@ from .models import Book, User, Borrow
 class BookAdmin(ImportExportModelAdmin):
     # 显示列
     list_display = ('book_id', 'book_name', 'book_author', 'book_press', 'book_isbn', 'book_language',
-                    'book_price', 'book_publish_date', 'book_number', 'book_category_choice')
+                    'book_price', 'book_publish_date', 'book_add_time', 'book_number', 'book_category_choice',
+                    'book_views', 'book_borrow')
     # 过滤器
     list_filter = ['book_publish_date', 'book_category_choice']
     # 搜索域

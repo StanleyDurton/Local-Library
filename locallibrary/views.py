@@ -320,6 +320,7 @@ def borrow_book(request, book_isbn):
                 messages.error(request, "数据库出现了一些错误，请您刷新试试")
             else:
                 book.book_number -= 1
+                book.book_borrow += 1
                 book.save()
                 new_record.save()
                 messages.success(request, "借阅成功！")

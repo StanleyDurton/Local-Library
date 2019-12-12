@@ -16,6 +16,7 @@ class Book(models.Model):
     # 主题：book_category_choice
     # 摘要：book_summary
     # 浏览量：book_views
+    # 借阅次数：book_borrow
     # 评论：book_comment
     book_catergary = (
         ('technology', '科技'),
@@ -35,9 +36,11 @@ class Book(models.Model):
     book_language = models.CharField('语言', max_length=100, default="中文")
     book_price = models.FloatField('价格', default=0.0)
     book_publish_date = models.DateField('出版日期', default="1999-12-31")
+    book_add_time = models.DateTimeField('上架时间', default=timezone.now())
     book_number = models.PositiveSmallIntegerField('数量', default=1)
     book_category_choice = models.CharField('主题', max_length=100, choices=book_catergary, default='literature')
     book_views = models.PositiveSmallIntegerField('浏览量', default=0)
+    book_borrow = models.PositiveIntegerField('借阅次数', default=0)
     book_summary = models.TextField('内容简介', default="")
 
     def __str__(self):
@@ -90,6 +93,7 @@ class Borrow(models.Model):
     borrow_time = models.DateTimeField(default=timezone.now())
     return_time = models.DateTimeField(null=True)
     is_return = models.CharField(max_length=10, default="True")
+
 
     def __str__(self):
         return str(self.user.user_id) + " " + str(self.book.book_id)
