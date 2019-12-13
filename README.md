@@ -1,7 +1,6 @@
 # Local-Library
 Just an example of practicing Django Framework
-
-For Installing on your computer (for example Win 10 1809)
+        
 1. Prepare
     python==3.7.5
     pip==19.0.1
@@ -18,6 +17,9 @@ For Installing on your computer (for example Win 10 1809)
     python manage.py runserver
 4. Control
     open your browser 127.0.0.1:8000
+
+
+
   
     
     
