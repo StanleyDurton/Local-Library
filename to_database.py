@@ -250,14 +250,14 @@ class DatabaseTest(TestCase):
     tag = "society"
     url = 'https://book.douban.com/tag/' + tag
 
-    book_path = "Book-2019-12-07.xls"
-    user_path = "User-2019-12-07.xls"
-    borrow_path = "C:/Users/imagi/Downloads/Borrow-2019-12-09 (1).xls"
+    book_path = "Book-2019-12-14.xls"
+    user_path = "User-2019-12-14.xls"
+    borrow_path = "Borrow-2019-12-14.xls"
 
     # 从爬虫中获取书籍，并写入数据库
     # load_data_from_list(url, tag)
 
     # 从文件中读取书籍，并写入数据库
-    # load_book_from_file(book_path)
-    # load_user_from_file(user_path)
-    # load_borrow_from_file(borrow_path)
+    load_book_from_file(book_path)
+    load_user_from_file(user_path)
+    load_borrow_from_file(borrow_path)

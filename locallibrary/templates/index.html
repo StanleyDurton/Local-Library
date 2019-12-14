@@ -29,29 +29,28 @@
           -moz-background-size: cover;
           -ms-background-size: cover;
     }
+
+
     </style>
 </head>
 <body>
+<!--导航栏-->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <!--登陆和注册的链接-->
     <div class="container">
-        <!--登陆和注册的导航栏链接-->
         <a class="navbar-brand" href="#" style="font-size: 1.5rem">
-            <h4>
-                城市书吧
-            </h4>
+            <h4>城市书吧</h4>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample07"
                 aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         <!--判断是否登录-->
         {% csrf_token %}
         <div class="btn-group" role="group" style="font-size: 1rem">
-
             {% if request.session.user_name %}
-
             <a class="my-2 my-sm-0 nav-link" style="color: black">欢迎您，读者 {{request.session.user_name}}</a>
-
             <a href="/user" class="my-2 my-sm-0">
                 <button class="btn btn-info" type="submit">账号</button>
             </a>
@@ -87,7 +86,7 @@
 
             <form class="form-inline my-2 my-lg-0" action="/query/" method="post" role="form">
                 {% csrf_token %}
-                <input class="form-control mr-sm-2" type="text" name="search" id="search" placeholder="书名，作者，ISBN">
+                <input class="form-control mr-sm-2" type="text" name="search" id="search" placeholder="朝花夕拾">
                 <button class="btn btn-primary my-2 my-sm-0" type="submit">一键搜索</button>
             </form>
             <button class="btn btn-info my-2 my-sm-0" type="submit" style="margin-left: 12px">
@@ -103,10 +102,9 @@
     <div class="row">
         <div class="col-md-8">
             <!-- 新书推荐 -->
-            <h5 style="padding-left: 10px">本周新书推荐</h5>
-
+            <h5 style="padding-left: 10px">新书推荐</h5>
             <hr>
-            <!-- 展示最新上架的三本书-->
+            <!-- 展示最新上架的六本书-->
             <div class="row">
                 {% for line in book_list %}
                 <div class="col-sm-6 col-md-4">
@@ -125,9 +123,6 @@
 
         <!-- 这里可以放公告或者一些小故事-->
         <div class="col-md-4">
-
-            <!--            <h5>借书须知</h5>-->
-            <!--            <hr>-->
             <div class="card border-light mb-3" style="max-width: 20rem;">
                 <div class="card-header">借书须知</div>
                 <div class="card-body">
@@ -157,7 +152,7 @@
 </div>
 
 <footer class="container">
-    <p>© Library System by Stan 2019</p>
+    <p>© Library System 2019</p>
 </footer>
 
 </body>

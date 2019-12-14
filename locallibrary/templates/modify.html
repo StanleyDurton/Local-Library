@@ -10,13 +10,6 @@
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/litera/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-pLgJ8jZ4aoPja/9zBSujjzs7QbkTKvKw1+zfKuumQF9U+TH3xv09UUsRI52fS+A6" crossorigin="anonymous">
-    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-
-    <link rel="stylesheet" type="text/css"
-          href="jquery/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css">
-    <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
-    <script type="text/javascript"
-            src="jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
 
     <title>修改信息</title>
 
@@ -25,7 +18,7 @@
 
 <!--导航栏-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container" >
+    <div class="container">
         <!--登陆和注册的导航栏链接-->
         <a class="navbar-brand" href="/" style="font-size: 1.5rem; color: white">城市书吧</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample07"
@@ -37,9 +30,7 @@
         <div class="btn-group" role="group" style="font-size: 1rem">
 
             {% if request.session.user_name %}
-
             <a class="my-2 my-sm-0 nav-link" style="color: white">欢迎您，读者 {{request.session.user_name}}</a>
-
             <a href="/user" class="my-2 my-sm-0">
                 <button class="btn btn-info" type="submit">账号</button>
             </a>
@@ -54,8 +45,8 @@
             <a href="/register" class="my-2 my-sm-0">
                 <button class="btn btn-success" type="submit">注册</button>
             </a>
-
             {% endif %}
+
         </div>
     </div>
 </nav>
@@ -63,15 +54,13 @@
 <!-- Begin page content -->
 <div class="container">
     <div class="mt-5 mb-5">
-
         <form action="/modify/" method="post" role="form">
             {% csrf_token %}
-
             <div class="form-group row">
                 <label for="user_name" class="col-lg-2 col-form-label mr-2">User Name</label>
                 <div class="col-xs-9">
                     <input type="text" class="form-control" id="user_name" name="user_name"
-                           value="{{user.user_name}}" >
+                           value="{{user.user_name}}">
                 </div>
             </div>
 
@@ -94,7 +83,7 @@
             <div class="form-group row">
                 <label for="user_phone" class="col-lg-2 col-form-label mr-2">Phone Number</label>
                 <div class="col-xs-9">
-                    <input type="number" class="form-control" id="user_phone" name="user_phone"
+                    <input type="text" class="form-control" id="user_phone" name="user_phone"
                            value="{{user.user_phone}}">
                 </div>
             </div>
@@ -109,7 +98,7 @@
             <div class="form-group row">
                 <label for="user_gender" class="col-lg-2 col-form-label mr-2">Gender</label>
                 <div class="col-xs-9">
-                    <select class="form-control" id="user_gender" name="user_gender" >
+                    <select class="form-control" id="user_gender" name="user_gender">
                         <option>male</option>
                         <option>female</option>
                     </select>
@@ -156,9 +145,5 @@
     </div>
 </div>
 
-<!-- Bootstrap core JavaScript =========================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </body>
 </html>

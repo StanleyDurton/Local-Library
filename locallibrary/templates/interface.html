@@ -16,14 +16,10 @@
         font-family: Georgia, Cambria, "Times New Roman", Times, serif;
         }
 
-
-
     </style>
 
 </head>
 <body>
-
-
 <!--导航栏-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
@@ -38,9 +34,7 @@
         <div class="btn-group" role="group" style="font-size: 1rem">
 
             {% if request.session.user_name %}
-
             <a class="my-2 my-sm-0 nav-link" style="color: white">欢迎您，读者 {{request.session.user_name}}</a>
-
             <a href="/user" class="my-2 my-sm-0">
                 <button class="btn btn-info" type="submit">账号</button>
             </a>
@@ -88,8 +82,8 @@
 
             <div class="sidebar-module">
                 <a href="/user/" class="btn btn-block btn-outline-info">借还书记录</a>
-                <a href="/modify" class="btn btn-block btn-outline-warning">修改账号信息</a>
                 <a href="/report" class="btn btn-block btn-outline-info">个人读书报告</a>
+                <a href="/modify" class="btn btn-block btn-outline-warning">修改账号信息</a>
             </div>
         </div>
         <!-- /.blog-sidebar -->
@@ -98,7 +92,6 @@
             <div class="sidebar-module">
 
                 {% if request.session.record %}
-
                 <!-- show records -->
                 <h5>借还书记录 {{ record_number }} 本</h5>
                 <hr>
@@ -137,13 +130,12 @@
                 {% endif %}
 
                 {% if request.session.report %}
-
                 <!--show report-->
+                <!--diagram-->
                 <h5>主题统计</h5>
                 <hr>
-                <!--diagram-->
                 <div id="container" style="height: 300px; width: 800px"></div>
-
+                <!-- table -->
                 <h5>读书榜单</h5>
                 <hr>
                 <div style="height: 300px; width: 800px">
@@ -155,7 +147,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {% for record in year_number  %}
+                        {% for record in year_number %}
                         <tr>
                             <td>{{ record.0 }}</td>
                             <td>{{ record.1 }}</td>
@@ -164,7 +156,6 @@
                         </tbody>
                     </table>
                 </div>
-
                 {% endif %}
 
             </div>
@@ -177,16 +168,9 @@
 
 </div>
 
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-{# 以下三者的引用顺序是固定的#}
-<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
-<script src="https://cdn.bootcss.com/popper.js/1.15.0/umd/popper.js"></script>
-<script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
 
 <!--report script-->
- <script type="text/javascript"
+<script type="text/javascript"
         src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
 <script type="text/javascript"
         src="https://cdn.jsdelivr.net/npm/echarts-gl/dist/echarts-gl.min.js"></script>
@@ -249,7 +233,6 @@
     if (option && typeof option === "object") {
     myChart.setOption(option, true);
     }
-
 </script>
 
 </body>

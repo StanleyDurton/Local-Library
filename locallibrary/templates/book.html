@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="width=device-width, initial-scale=1" name="viewport">
-
+    <!--Bootswatch-->
     <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/litera/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-pLgJ8jZ4aoPja/9zBSujjzs7QbkTKvKw1+zfKuumQF9U+TH3xv09UUsRI52fS+A6" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'image/' %}">
@@ -52,48 +52,44 @@
     </div>
 </nav>
 
-{% block content %}
+<!--详情块-->
 <div class="container" style="padding-top: 30px;">
     <!-- 加载图书详细信息 -->
-<!--    <div class="row">-->
-        <div class="col-md-12 col-sm-10">
+    <div class="col-md-12 col-sm-10">
+        {% csrf_token %}
+        <h3 style="font-family: Helvetica Neue">{{ book.book_name }}</h3>
+        <hr>
 
-            {% csrf_token %}
+        <!--验证是否登录-->
+        {% if request.session.user_name %}
+        <div style="margin-bottom: 10px">
+            <a href="/borrow/{{ book.book_isbn }}">
+                <button class="btn btn-outline-info my-2 my-sm-0">借书</button>
+            </a>
 
-            <h3 style="font-family: Helvetica Neue">{{ book.book_name }}</h3>
-            <hr>
+            <a href="#">
+                <button class="btn btn-outline-info my-2 my-sm-0">收藏</button>
+            </a>
+        </div>
+        {% else %}
+        <div class="alert alert-warning" role="alert">您尚未登陆，不能对图书操作</div>
+        {% endif %}
 
-            <!-- 提示借阅操作的结果消息-->
-            {% if messages %}
-            {% for message in messages %}
-            {% if message.tags == "error" %}
-            <div class="alert alert-warning" role="alert">{{ message }}</div>
-            {% endif %}
-            {% if message.tags == "success" %}
-            <div class="alert alert-info" role="alert">{{ message }}</div>
-            {% endif %}
-            {% endfor %}
-            {% else %}
+        <!-- 提示借阅操作的结果消息-->
+        {% if messages %}
 
-            <!--验证是否登录-->
-            {% if request.session.user_name %}
+        {% for message in messages %}
+        {% if message.tags == "error" %}
+        <div class="alert alert-warning" role="alert">{{ message }}</div>
+        {% endif %}
+        {% if message.tags == "success" %}
+        <div class="alert alert-info" role="alert">{{ message }}</div>
+        {% endif %}
+        {% endfor %}
 
-            <div>
-                <a href="/borrow/{{ book.book_isbn }}">
-                    <button class="btn btn-outline-info my-2 my-sm-0">借书</button>
-                </a>
-                <a href="#">
-                    <button class="btn btn-outline-info my-2 my-sm-0">收藏</button>
-                </a>
-            </div>
-            {% else %}
-            <div class="alert alert-warning" role="alert">您尚未登陆，不能对图书操作</div>
-            {% endif %}
+        {% endif %}
 
-            {% endif %}
-
-
-            <script>
+        <script>
             function borrowconfirm(){
                 var check = confirm("R U Sure?");
                 if(check == true){
@@ -101,57 +97,47 @@
                 }else{
                     alert("error!");
                  }
-
             }
-            </script>
 
-            <hr>
-            <div class="row">
-                <div class="col-md-8">
-                    <p><strong>Author:</strong>{{ book.book_author }}</p>
-                    <p><strong>ISBN:</strong> {{ book.book_isbn }}</p>
-                    <p><strong>Publish:</strong> {{ book.book_press }}</p>
-                    <p><strong>Publish Date:</strong>{{ book.book_publish_date }}</p>
-                    <p><strong>Language:</strong> {{ book.book_language }}</p>
-                    <p><strong>Theme:</strong> {{ book.book_category_choice }}</p>
-                    <p><strong>Number:</strong> {{ book.book_number }}</p>
-                    <div class="btn-group" role="group" aria-label="...">
-                        <button type="button" class="btn btn-outline-primary">浏览</button>
-                        <button type="button" class="btn btn-info">{{ book.book_views }}</button>
-                    </div>
-                </div>
+        </script>
 
-                <div class="col-md-4" style="align: center">
-                    <img src="../static/image/{{book.book_name}}.jpg" width="180" height="240" alt="...">
+        <hr>
+        <div class="row">
+            <div class="col-md-8">
+                <p><strong>Author:</strong>{{ book.book_author }}</p>
+                <p><strong>ISBN:</strong> {{ book.book_isbn }}</p>
+                <p><strong>Publish:</strong> {{ book.book_press }}</p>
+                <p><strong>Publish Date:</strong>{{ book.book_publish_date }}</p>
+                <p><strong>Language:</strong> {{ book.book_language }}</p>
+                <p><strong>Theme:</strong> {{ book.book_category_choice }}</p>
+                <p><strong>Number:</strong> {{ book.book_number }}</p>
+                <div class="btn-group" role="group" aria-label="...">
+                    <button type="button" class="btn btn-outline-primary">浏览</button>
+                    <button type="button" class="btn btn-info">{{ book.book_views }}</button>
                 </div>
             </div>
-            <hr>
-            <h4>Summary:</h4>
-            <p>
-                {{ book.book_summary }}
-            </p>
+
+            <div class="col-md-4" style="align: center">
+                <img src="../static/image/{{book.book_name}}.jpg" width="180" height="240" alt="...">
+            </div>
         </div>
+        <hr>
+        <h4>Summary:</h4>
+        <p>
+            {{ book.book_summary }}
+        </p>
+    </div>
 
-<!--        <div class="col-md-4">-->
-<!--            &lt;!&ndash; 这里可以放公告或者一些小故事&ndash;&gt;-->
-<!--            <h2 id="detail">评论模块</h2>-->
+<!--    <div class="col-md-4">-->
+<!--        &lt;!&ndash; 这里可以放公告或者一些小故事&ndash;&gt;-->
+<!--        <h2 id="detail">评论模块</h2>-->
 
-<!--            <p>comment here</p>-->
-<!--        </div>-->
+<!--        <p>comment here</p>-->
 <!--    </div>-->
-
 
     <hr>
 </div>
-{% endblock %}
 <!-- /container -->
-
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-{# 以下三者的引用顺序是固定的#}
-<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
-<script src="https://cdn.bootcss.com/popper.js/1.15.0/umd/popper.js"></script>
-<script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 </body>
 </html>
