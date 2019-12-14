@@ -14,14 +14,17 @@ class BookAdmin(ImportExportModelAdmin):
     list_filter = ['book_publish_date', 'book_category_choice']
     # 搜索域
     search_fields = ['book_name', 'book_author', 'book_press']
+    date_hierarchy = 'book_publish_date'
 
 
 class UserAdmin(ImportExportModelAdmin):
-    list_display = ("user_name", "user_phone", "user_email", "user_gender")
+    list_display = ("user_id", "user_name", "user_phone", "user_email", "user_gender")
+    search_fields = ['user_name']
 
 
 class BorrowAdmin(ImportExportModelAdmin):
     list_display = ('user', 'book', 'borrow_time', 'return_time', 'is_return')
+    search_fields = ['user', 'book',]
 
 
 # Register your models here.

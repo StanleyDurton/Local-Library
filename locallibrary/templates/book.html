@@ -55,12 +55,13 @@
 {% block content %}
 <div class="container" style="padding-top: 30px;">
     <!-- 加载图书详细信息 -->
-    <div class="row">
-        <div class="col-md-8 col-sm-10">
+<!--    <div class="row">-->
+        <div class="col-md-12 col-sm-10">
 
             {% csrf_token %}
 
-            <h4 style="font-family: Helvetica Neue">{{ book.book_name }}</h4>
+            <h3 style="font-family: Helvetica Neue">{{ book.book_name }}</h3>
+            <hr>
 
             <!-- 提示借阅操作的结果消息-->
             {% if messages %}
@@ -93,17 +94,15 @@
 
 
             <script>
-                        function borrowconfirm(){
-                            var check = confirm("R U Sure?");
-                            if(check == true){
-                                alert("sucessfully borrow!");
-                            }else{
-                                alert("error!");
-                             }
+            function borrowconfirm(){
+                var check = confirm("R U Sure?");
+                if(check == true){
+                    alert("sucessfully borrow!");
+                }else{
+                    alert("error!");
+                 }
 
-                        }
-
-
+            }
             </script>
 
             <hr>
@@ -133,13 +132,13 @@
             </p>
         </div>
 
-        <div class="col-md-4">
-            <!-- 这里可以放公告或者一些小故事-->
-            <h2 id="detail">评论模块</h2>
+<!--        <div class="col-md-4">-->
+<!--            &lt;!&ndash; 这里可以放公告或者一些小故事&ndash;&gt;-->
+<!--            <h2 id="detail">评论模块</h2>-->
 
-            <p>comment here</p>
-        </div>
-    </div>
+<!--            <p>comment here</p>-->
+<!--        </div>-->
+<!--    </div>-->
 
 
     <hr>

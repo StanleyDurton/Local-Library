@@ -58,6 +58,7 @@ class User(models.Model):
     # 账号：user_name
     # 密码: user_password
     # 手机：user_phone
+    # 生日：user_birthday
     # 性别: user_gender
     # 邮件: user_email
     user_id = models.AutoField(primary_key=True)
@@ -93,7 +94,6 @@ class Borrow(models.Model):
     borrow_time = models.DateTimeField(default=timezone.now())
     return_time = models.DateTimeField(null=True)
     is_return = models.CharField(max_length=10, default="True")
-
 
     def __str__(self):
         return str(self.user.user_id) + " " + str(self.book.book_id)
