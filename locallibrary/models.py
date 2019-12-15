@@ -1,3 +1,9 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# @Author  : Team
+# @FileName: models.py
+# @Software: PyCharm
+
 from django.db import models
 from django.utils import timezone
 
@@ -102,3 +108,4 @@ class Borrow(models.Model):
         ordering = ['-borrow_time']
         verbose_name = '借还记录'
         verbose_name_plural = "借还记录"
+

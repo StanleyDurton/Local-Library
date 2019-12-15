@@ -1,3 +1,9 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# @Author : Team
+# @FileName: admin.py
+# @Software: PyCharm
+
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 

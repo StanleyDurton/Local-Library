@@ -1,3 +1,9 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# @Author  : Team
+# @FileName: view.py
+# @Software: PyCharm
+
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.contrib import messages
@@ -6,15 +12,23 @@ import json
 from .models import Book, User, Borrow
 
 
-# 主界面视图
 def index(request):
-    # 选取最近上架的六本书来展示
-    book_list = Book.objects.all()[:6]
+    # 主界面视图
+    # @html: index.html
+    # @Author: A
+    # 选取最近上架的六本书, 将数据返回主页作为新书推荐来展示
+
+    book_list = Book.objects.all().order_by('-book_id')[:6]
     return render(request, 'index.html', {'book_list': book_list})
 
 
-# 登录视图
 def login(request):
+    # 登录视图
+    # @html: login.html
+    # @Author: A
+    # 1. 接受导航栏登录按钮的跳转链接，然后转到登录界面
+    # 2. 接受登录界面的表单的信息提交，验证后将登录的状态返回到登录界面
+
     if request.method == 'GET':
         # 链接跳转过来的登录页面，采用GET方法 <a href="">
         return render(request, 'login.html')
@@ -36,8 +50,13 @@ def login(request):
         return render(request, 'login.html')
 
 
-# 注册视图
 def register(request):
+    # 注册视图
+    # @html: register.html
+    # @Author: A
+    # 1. 接受导航栏注册按钮的跳转链接，然后转到注册界面
+    # 2. 接受注册界面的表单的信息提交，验证后将注册的状态返回到注册界面
+
     if request.method == 'GET':
         # 链接跳转过来的注册页面，采用GET方法 <a href="">
         return render(request, 'register.html')
@@ -73,15 +92,24 @@ def register(request):
         return render(request, 'register.html')
 
 
-# 注销视图
 def logout(request):
+    # 注销视图
+    # @html: None
+    # @Author: A
+    # 退出当前用户的账号，将session中的用户名等状态信息删除，并返回主页
+
     request.session.flush()
     # 回到首页
     return redirect('/')
 
 
-# 查询视图
 def query(request):
+    # 查询视图
+    # @html: query.html
+    # @Author: B
+    # 1. 接受首页一键查询表单提交的查询字段，并检索数据库，将结果返回到查询页
+    # 2. 接受首页高级查询跳转的链接，并直接返回查询页
+
     if request.method == 'POST':
         # 主页form提交搜索事件，采用post方法
         search_string = request.POST.get('search')
@@ -104,7 +132,7 @@ def query(request):
         book_list = Book.objects.all()
         query_string = ""
 
-    # arr_length: 查询结果的条目数；flag: 防止嵌套的高级查询（因为没有意义）
+    # arr_length: 查询结果的条目数
     arr_length = len(book_list)
     flag = True
     if arr_length > 0:
@@ -118,8 +146,12 @@ def query(request):
     return render(request, 'query.html', locals())
 
 
-# 高级查询视图
 def advance_query(request):
+    # 高级查询视图
+    # @html: query.html
+    # @Author: B
+    # 接收过滤器的检索字段，根据条件对数据库进行搜索，然后将查询结果返回到查询页
+
     if request.method == "POST":
         # form表单提交搜索事件，采用post方法
         title = request.POST.get("title")
@@ -169,16 +201,25 @@ def advance_query(request):
         return render(request, 'query.html', locals())
 
 
-# 书目详情视图
 def book(request, isbn):
+    # 书目详情视图
+    # @html: book.html
+    # @Author: B
+    # 根据前台返回的ISBN码，查询并返回图书详情
+
     book = Book.objects.get(book_isbn=isbn)
+    # 浏览量加一
     book.book_views += 1
     book.save()
     return render(request, 'book.html', locals())
 
 
-# 读者账号页面视图
 def account(request):
+    # 读者账号页面视图
+    # @html: interface.html
+    # @Author: A
+    # 将用户信息和借还书记录返回到用户主页
+
     name = request.session.get('user_name')
     request.session['record'] = True
     request.session['report'] = False
@@ -190,8 +231,11 @@ def account(request):
     return render(request, 'interface.html', locals())
 
 
-# 读者读书报告
 def calculate_subject(book_list):
+    # @html: None
+    # @Author:
+    # 计算报告的主题分类
+
     # 去重书名
     id_list = book_list.order_by('book_id').values_list('book_id', flat=True).distinct()
 
@@ -209,10 +253,14 @@ def calculate_subject(book_list):
 
 
 def calculate_book(book_list):
+    # @html: None
+    # @Author: B
+    # 计算报告的阅读榜单
+
     # 去重书名
     name_list = book_list.order_by('book_id').values_list('book_id', flat=True).distinct()
 
-    # 统计借阅次数最多的图书
+    # 统计图书的借阅次数
     name_dict = dict()
     for name in name_list:
         name_dict.setdefault(name, book_list.filter(book=name).count())
@@ -230,6 +278,11 @@ def calculate_book(book_list):
 
 
 def report(request):
+    # 读者读书报告
+    # @html: interface.html
+    # @Author: A
+    # 计算用户的年度读书报告并返回
+
     name = request.session.get('user_name')
     request.session['record'] = False
     request.session['report'] = True
@@ -259,7 +312,7 @@ def report(request):
     start_date_string = "%s-%s-%s" % (cur_year, 1, 1)
     start_date = timezone.datetime.strptime(start_date_string, '%Y-%m-%d')
 
-    # 筛选记录
+    # 筛选记录（上一个月和本年度的记录）
     month_records = Borrow.objects.filter(user=q, borrow_time__range=(start_time, end_time))
     year_records = Borrow.objects.filter(user=q, borrow_time__range=(start_date, timezone.now()))
 
@@ -281,8 +334,12 @@ def report(request):
     return render(request, 'interface.html', locals())
 
 
-# 还书操作处理
 def return_book(request, book_isbn):
+    # 还书操作处理
+    # @html: interface.html
+    # @Author: A
+    # 接受用户发起的还书操作并返回
+
     name = request.session.get('user_name')
     # 获取账号信息，书目信息和借还书记录
     q = User.objects.get(user_name=name)
@@ -299,8 +356,12 @@ def return_book(request, book_isbn):
     return render(request, 'interface.html', locals())
 
 
-# 借书操作处理
 def borrow_book(request, book_isbn):
+    # 借书操作处理
+    # @html: book.html
+    # @Author: A
+    # 接受用户的借书操作并返回
+
     if request.method == 'GET':
         # 按钮链接跳转过来，采用GET方法 <a href="">
         # 获取账号信息，书目信息和借还书记录
@@ -319,6 +380,7 @@ def borrow_book(request, book_isbn):
             except:
                 messages.error(request, "数据库出现了一些错误，请您刷新试试")
             else:
+                # 库存书目减一， 借书次数加一
                 book.book_number -= 1
                 book.book_borrow += 1
                 book.save()
@@ -330,11 +392,16 @@ def borrow_book(request, book_isbn):
 
 
 def modify(request):
+    # 修改用户账号信息
+    # @html: modify.html
+    # @Author: A
+    # 接受用户的修改账号信息的请求并返回
+
     if request.method == "GET":
         user = User.objects.get(user_name=request.session.get('user_name'))
         return render(request, 'modify.html', locals())
     else:
-        # 修改账号信息，但是不可以修改用户名
+        # 修改账号信息，但是不可以修改用户名，接受表单的输入的新信息
         user_name = request.session.get('user_name')
         user_password = request.POST.get('user_password')
         user_birthday = request.POST.get('user_birthday')
@@ -342,6 +409,7 @@ def modify(request):
         user_email = request.POST.get('user_email')
         user = User.objects.get(user_name=user_name)
         flag_modify = False
+        # 查看各字段是不是为空，如不为空则判断修改后的信息与原来的是否相同
         if user_password.strip() and user_password != user.user_password:
             user.user_password = user_password
             flag_modify = True
