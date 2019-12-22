@@ -177,7 +177,7 @@ def load_book_from_file(file_path):
             date = datetime.strptime(row[7].strip(), "%Y-%m")
         else:
             date = datetime.strptime(row[7].strip(), "%Y-%m-%d")
-
+        print("Book row", row[10])
         new_record = Book.objects.create(book_name=row[1],
                                          book_author=row[2],
                                          book_press=row[3],
@@ -185,9 +185,12 @@ def load_book_from_file(file_path):
                                          book_language=row[5],
                                          book_price=row[6],
                                          book_publish_date=date,
-                                         book_number=row[8],
-                                         book_category_choice=row[9],
-                                         book_summary=row[10],
+                                         book_add_time=datetime.now(),
+                                         book_number=row[9],
+                                         book_category_choice=row[10],
+                                         book_views=row[11],
+                                         book_borrow=row[12],
+                                         book_summary=row[13],
                                          )
         new_record.save()
         cnt += 1
