@@ -18,6 +18,10 @@ Just an example of practicing Django Framework
 4. Control
     open your browser 127.0.0.1:8000
 
+For win xp user:
+1. python == 3.4.3
+   pip == 19.+
+2. django==2.0.13
 
 
   
